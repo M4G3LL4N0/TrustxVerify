@@ -10,8 +10,8 @@ CREATE TABLE brandcrossover.brand_profiles (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Enable RLS for brand profiles
-ALTER TABLE brandcrossover.brand_profiles ENABLE ROW LEVEL SECURITY;
+-- Enable RLS for brand profiles (commented out until policies are defined)
+-- ALTER TABLE brandcrossover.brand_profiles ENABLE ROW LEVEL SECURITY;
 
 -- Create crossover opportunities table
 CREATE TABLE brandcrossover.crossover_opportunities (
@@ -26,8 +26,8 @@ CREATE TABLE brandcrossover.crossover_opportunities (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Enable RLS for crossover opportunities
-ALTER TABLE brandcrossover.crossover_opportunities ENABLE ROW LEVEL SECURITY;
+-- Enable RLS for crossover opportunities (commented out until policies are defined)
+-- ALTER TABLE brandcrossover.crossover_opportunities ENABLE ROW LEVEL SECURITY;
 
 -- Indexes for faster lookups
 CREATE INDEX idx_brand_profiles_name ON brandcrossover.brand_profiles(name);
