@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function ReportPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,10 +31,15 @@ export default function ReportPage() {
 
     setLoading(false);
 
-    if (res.ok) {
-      setSubmitted(true);
-      e.currentTarget.reset();
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError(data.error || 'Submission failed. Please try again.');
+      return;
     }
+    
+    setSubmitted(true);
+    setError(null);
+    e.currentTarget.reset();
   }
 
   return (

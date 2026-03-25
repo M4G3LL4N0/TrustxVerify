@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import type { SearchResult } from "@/lib/types";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse<{ 
+  results: SearchResult[],
+  error?: string 
+}>> {
   const q = request.nextUrl.searchParams.get("q")?.trim();
 
   if (!q) {

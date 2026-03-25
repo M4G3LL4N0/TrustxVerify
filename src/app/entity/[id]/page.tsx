@@ -9,11 +9,16 @@ export default async function EntityPage({
 }) {
   const { id } = params;
 
-  const { data: entity } = await supabase
+  const { data: entity, error: entityError } = await supabase
     .from("entities")
     .select("*")
     .eq("id", id)
     .single();
+
+  if (entityError) {
+    console.error('Entity fetch error:', entityError);
+    notFound();
+  }
 
   if (!entity) notFound();
 

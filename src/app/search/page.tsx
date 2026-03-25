@@ -8,6 +8,7 @@ export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -20,7 +21,8 @@ export default function SearchPage() {
       setResults(data.results ?? []);
     } catch (error) {
       console.error('Search error:', error);
-      setResults([]); // Clear results on error
+      setError('Search failed. Please try again.');
+      setResults([]);
     }
     } finally {
       setLoading(false);
