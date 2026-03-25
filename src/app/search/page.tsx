@@ -10,20 +10,28 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleSearch(e: React.FormEvent) {
+  async function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (!query.trim()) return;
+
     setLoading(true);
+    setError(null);
 
     try {
       const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-      if (!res.ok) throw new Error('Search failed');
-      const data = (await res.json()) as { results?: SearchResult[] };
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Search failed.");
+      }
+
+      const data = await res.json();
       setResults(data.results ?? []);
-    } catch (error) {
-      console.error('Search error:', error);
-      setError('Search failed. Please try again.');
+    } catch (err) {
+      console.error(err);
       setResults([]);
-    }
+      setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -32,10 +40,15 @@ export default function SearchPage() {
   return (
     <main className="pb-24 pt-8">
       <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
-        <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">Trust search</p>
-        <h1 className="mt-3 text-4xl font-semibold text-white">Search any entity</h1>
+        <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">
+          Trust search
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold text-white">
+          Search any entity
+        </h1>
         <p className="mt-4 max-w-2xl text-white/65">
-          Search a person, business, marketplace username, email, phone number, or address.
+          Search a person, business, marketplace username, email, phone number,
+          or address.
         </p>
 
         <form onSubmit={handleSearch} className="mt-8 flex flex-col gap-4 md:flex-row">
@@ -53,6 +66,12 @@ export default function SearchPage() {
             {loading ? "Searching..." : "Run search"}
           </button>
         </form>
+
+        {error ? (
+          <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-400/10 p-4 text-sm text-red-300">
+            {error}
+          </div>
+        ) : null}
       </div>
 
       <div className="mt-8 grid gap-4">
