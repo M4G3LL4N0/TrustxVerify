@@ -26,12 +26,12 @@ const features = [
 
 export default function HomePage() {
   return (
-    <main className="pb-24 pt-10">
-      <section className="rounded-[2rem] border border-white/10 bg-white/[0.03] px-8 py-16 shadow-2xl shadow-cyan-950/30">
+    <main className="pb-32 pt-6 sm:pt-12 lg:pt-16">
+      <section className="mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-white/[0.03] px-6 py-12 shadow-2xl shadow-cyan-950/30 sm:px-8 sm:py-16">
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-cyan-300/80">
           The trust layer for global commerce
         </p>
-        <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-tight text-white md:text-7xl">
+        <h1 className="mt-6 max-w-4xl text-[2.5rem] font-semibold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
           Verify who you are dealing with before money, inventory, or risk moves.
         </h1>
         <p className="mt-6 max-w-3xl text-lg leading-8 text-white/70">
@@ -55,7 +55,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <section className="mx-auto mt-16 grid max-w-7xl gap-6 px-6 sm:grid-cols-2 xl:grid-cols-4">
         {features.map((feature) => {
           const Icon = feature.icon;
           return (
