@@ -17,7 +17,7 @@ export interface CrossoverOpportunity {
   updated_at: string
 }
 
-export async function getCrossoverOpportunities() {
+export async function getCrossoverOpportunities(): Promise<CrossoverOpportunity[]> {
   const { data, error } = await supabaseAdmin
     .from('brandcrossover.crossover_opportunities')
     .select('*')

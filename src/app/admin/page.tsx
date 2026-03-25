@@ -5,13 +5,19 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        <div className="text-sm text-gray-500">
+          Last updated: {new Date().toLocaleString()}
+        </div>
+      </div>
 
-      <section>
+      <section className="space-y-6">
         <h2 className="mb-4 text-xl font-semibold">Crossover Opportunities</h2>
         {opportunities.length > 0 ? (
-          <div className="overflow-hidden rounded-lg border border-gray-200">
+          <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
             <table className="min-w-full divide-y divide-gray-200">
+              <caption className="sr-only">Crossover Opportunities</caption>
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
