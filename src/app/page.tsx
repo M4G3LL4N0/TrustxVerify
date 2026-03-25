@@ -52,6 +52,12 @@ export default function HomePage() {
           >
             Report fraud
           </Link>
+          <Link
+            href="/report-demo"
+            className="rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+          >
+            See demo
+          </Link>
         </div>
       </section>
 
