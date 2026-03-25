@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
-
-interface ReportPayload {
-  entityIdentifier?: string;
-  entityDisplayName?: string;
-  entityType?: string;
-  reportType?: string;
-  description?: string; 
-  evidenceUrl?: string;
-  reporterEmail?: string;
-}
+import { getSupabaseClient } from "@/lib/supabase";
 
 export async function POST(request: NextRequest) {
-  const body = await request.json() as ReportPayload;
+  const supabase = getSupabaseClient();
+
+  if (!supabase) {
+    return NextResponse.json(
+      {
+        error:
+          "Supabase environment variables are missing. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+      },
+      { status: 500 }
+    );
+  }
+
+  const body = await request.json();
 
   const entityIdentifier = String(body.entityIdentifier || "").trim();
   const entityDisplayName = String(body.entityDisplayName || entityIdentifier).trim();
@@ -51,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     entityId = createdEntity.id;
 
-    await supabase.from("scores").insert({
+    const { error: scoreInsertError } = await supabase.from("scores").insert({
       entity_id: entityId,
       trust_score: 450,
       risk_level: "medium",
@@ -59,6 +61,10 @@ export async function POST(request: NextRequest) {
       signal_summary: "Initial score generated from first-party report intake.",
       reasons: ["Newly created entity", "Awaiting more data points"],
     });
+
+    if (scoreInsertError) {
+      return NextResponse.json({ error: scoreInsertError.message }, { status: 500 });
+    }
   }
 
   const { error: reportError } = await supabase.from("reports").insert({

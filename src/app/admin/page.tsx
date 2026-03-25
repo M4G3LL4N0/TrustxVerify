@@ -1,77 +1,139 @@
-import { getCrossoverOpportunities } from '@/lib/supabase-admin'
+import { getSupabaseClient } from "@/lib/supabase";
+
+export const dynamic = "force-dynamic";
+
+type AdminEntity = {
+  id: string;
+  type: string;
+  display_name: string;
+  identifier: string;
+  created_at: string;
+};
+
+type AdminReport = {
+  id: string;
+  entity_identifier: string;
+  entity_type: string;
+  report_type: string;
+  status: string;
+  created_at: string;
+};
 
 export default async function AdminPage() {
-  const opportunities = await getCrossoverOpportunities()
+  const supabase = getSupabaseClient();
+
+  if (!supabase) {
+    return (
+      <main className="pb-24 pt-8">
+        <div className="rounded-[2rem] border border-amber-400/20 bg-amber-400/10 p-8">
+          <p className="text-xs uppercase tracking-[0.24em] text-amber-300/80">Admin</p>
+          <h1 className="mt-3 text-4xl font-semibold text-white">
+            Supabase environment variables are missing
+          </h1>
+          <p className="mt-4 max-w-3xl text-white/70">
+            Add valid values for NEXT_PUBLIC_SUPABASE_URL and
+            NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local and in Vercel project
+            settings, then rebuild.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  const [{ data: entities }, { data: reports }, { count: entityCount }, { count: reportCount }] =
+    await Promise.all([
+      supabase
+        .from("entities")
+        .select("id, type, display_name, identifier, created_at")
+        .order("created_at", { ascending: false })
+        .limit(10),
+      supabase
+        .from("reports")
+        .select("id, entity_identifier, entity_type, report_type, status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(10),
+      supabase.from("entities").select("*", { count: "exact", head: true }),
+      supabase.from("reports").select("*", { count: "exact", head: true }),
+    ]);
+
+  const safeEntities: AdminEntity[] = (entities ?? []) as AdminEntity[];
+  const safeReports: AdminReport[] = (reports ?? []) as AdminReport[];
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-        <div className="text-sm text-gray-500">
-          Last updated: {new Date().toLocaleString()}
+    <main className="pb-24 pt-8">
+      <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
+        <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">Admin</p>
+        <h1 className="mt-3 text-4xl font-semibold text-white">
+          TrustxVerify operations dashboard
+        </h1>
+        <p className="mt-4 max-w-3xl text-white/70">
+          Read-only operational visibility into entities, reports, and trust data
+          flowing through the platform.
+        </p>
+      </div>
+
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-white/55">Total entities</p>
+          <p className="mt-2 text-4xl font-bold text-white">{entityCount ?? 0}</p>
+        </div>
+        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-sm text-white/55">Total reports</p>
+          <p className="mt-2 text-4xl font-bold text-white">{reportCount ?? 0}</p>
         </div>
       </div>
 
-      <section className="space-y-6">
-        <h2 className="mb-4 text-xl font-semibold">Crossover Opportunities</h2>
-        {opportunities.length > 0 ? (
-          <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
-            <table className="min-w-full divide-y divide-gray-200">
-              <caption className="sr-only">Crossover Opportunities</caption>
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Concept
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Source Brand
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Target Brand
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Category
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Score
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                    Summary
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
-                {opportunities.map((opp) => (
-                  <tr key={opp.id}>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                      {opp.concept_name}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                      {opp.source_brand}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                      {opp.target_brand}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                      {opp.target_category}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                      {opp.total_score}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
-                      {opp.summary}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      <div className="mt-8 grid gap-6 xl:grid-cols-2">
+        <section className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+          <h2 className="text-2xl font-semibold text-white">Recent entities</h2>
+          <div className="mt-6 space-y-4">
+            {safeEntities.length ? (
+              safeEntities.map((entity) => (
+                <div
+                  key={entity.id}
+                  className="rounded-[1.25rem] border border-white/10 bg-slate-950/50 p-4"
+                >
+                  <p className="text-xs uppercase tracking-[0.18em] text-cyan-300/80">
+                    {entity.type}
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold text-white">
+                    {entity.display_name}
+                  </h3>
+                  <p className="mt-1 text-sm text-white/55">{entity.identifier}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-white/45">No entities yet.</p>
+            )}
           </div>
-        ) : (
-          <div className="rounded-lg border border-dashed border-gray-200 p-6 text-center text-gray-500">
-            No crossover opportunities found
+        </section>
+
+        <section className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+          <h2 className="text-2xl font-semibold text-white">Recent reports</h2>
+          <div className="mt-6 space-y-4">
+            {safeReports.length ? (
+              safeReports.map((report) => (
+                <div
+                  key={report.id}
+                  className="rounded-[1.25rem] border border-white/10 bg-slate-950/50 p-4"
+                >
+                  <p className="text-xs uppercase tracking-[0.18em] text-cyan-300/80">
+                    {report.report_type}
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold text-white">
+                    {report.entity_identifier}
+                  </h3>
+                  <p className="mt-1 text-sm text-white/55">
+                    {report.entity_type} • {report.status}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-white/45">No reports yet.</p>
+            )}
           </div>
-        )}
-      </section>
-    </div>
-  )
+        </section>
+      </div>
+    </main>
+  );
 }
