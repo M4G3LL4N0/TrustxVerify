@@ -5,9 +5,9 @@ import { Badge } from "@/components/badge";
 export default async function EntityPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
+  const { id } = params;
 
   const { data: entity } = await supabase
     .from("entities")

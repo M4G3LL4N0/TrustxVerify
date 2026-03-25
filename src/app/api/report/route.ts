@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+interface ReportPayload {
+  entityIdentifier?: string;
+  entityDisplayName?: string;
+  entityType?: string;
+  reportType?: string;
+  description?: string; 
+  evidenceUrl?: string;
+  reporterEmail?: string;
+}
+
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  const body = await request.json() as ReportPayload;
 
   const entityIdentifier = String(body.entityIdentifier || "").trim();
   const entityDisplayName = String(body.entityDisplayName || entityIdentifier).trim();

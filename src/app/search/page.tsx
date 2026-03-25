@@ -15,8 +15,13 @@ export default function SearchPage() {
 
     try {
       const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-      const data = await res.json();
+      if (!res.ok) throw new Error('Search failed');
+      const data = (await res.json()) as { results?: SearchResult[] };
       setResults(data.results ?? []);
+    } catch (error) {
+      console.error('Search error:', error);
+      setResults([]); // Clear results on error
+    }
     } finally {
       setLoading(false);
     }
