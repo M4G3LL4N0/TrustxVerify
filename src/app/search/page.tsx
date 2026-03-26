@@ -22,18 +22,16 @@ export default function SearchPage() {
       const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({})); // Gracefully handle JSON parse errors
+        const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Search failed.");
       }
 
-      const { results } = await res.json();
-      setResults(results ?? []);
-    } catch (err: unknown) {
-      console.error("Search error:", err);
+      const data = await res.json();
+      setResults(data.results ?? []);
+    } catch (err) {
+      console.error(err);
       setResults([]);
-      setError(
-        err instanceof Error ? err.message : "Unable to complete search"
-      );
+      setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setLoading(false);
     }

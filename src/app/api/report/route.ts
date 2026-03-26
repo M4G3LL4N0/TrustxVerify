@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseClient } from "@/lib/supabase";
+import { calculateScore } from "@/lib/scoring";
 
 export async function POST(request: NextRequest) {
   const supabase = getSupabaseClient();
 
   if (!supabase) {
     return NextResponse.json(
-      {
-        error:
-          "Supabase environment variables are missing. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
-      },
+      { error: "Missing Supabase env" },
       { status: 500 }
     );
   }
@@ -21,23 +19,22 @@ export async function POST(request: NextRequest) {
   const entityType = String(body.entityType || "person").trim();
   const reportType = String(body.reportType || "").trim();
   const description = String(body.description || "").trim();
-  const evidenceUrl = String(body.evidenceUrl || "").trim() || null;
-  const reporterEmail = String(body.reporterEmail || "").trim() || null;
 
   if (!entityIdentifier || !reportType || !description) {
-    return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
-  const { data: existingEntity } = await supabase
+  // find or create entity
+  const { data: existing } = await supabase
     .from("entities")
     .select("*")
     .eq("identifier", entityIdentifier)
     .maybeSingle();
 
-  let entityId = existingEntity?.id ?? null;
+  let entityId = existing?.id;
 
-  if (!existingEntity) {
-    const { data: createdEntity, error: entityError } = await supabase
+  if (!existing) {
+    const { data: created } = await supabase
       .from("entities")
       .insert({
         type: entityType,
@@ -47,41 +44,54 @@ export async function POST(request: NextRequest) {
       .select("*")
       .single();
 
-    if (entityError) {
-      return NextResponse.json({ error: entityError.message }, { status: 500 });
-    }
+    entityId = created.id;
 
-    entityId = createdEntity.id;
-
-    const { error: scoreInsertError } = await supabase.from("scores").insert({
+    await supabase.from("scores").insert({
       entity_id: entityId,
-      trust_score: 450,
-      risk_level: "medium",
-      confidence_score: 20,
-      signal_summary: "Initial score generated from first-party report intake.",
-      reasons: ["Newly created entity", "Awaiting more data points"],
+      trust_score: 700,
+      risk_level: "low",
+      confidence_score: 10,
     });
-
-    if (scoreInsertError) {
-      return NextResponse.json({ error: scoreInsertError.message }, { status: 500 });
-    }
   }
 
-  const { error: reportError } = await supabase.from("reports").insert({
+  // insert report
+  await supabase.from("reports").insert({
     entity_id: entityId,
     entity_identifier: entityIdentifier,
     entity_display_name: entityDisplayName,
     entity_type: entityType,
     report_type: reportType,
     description,
-    evidence_url: evidenceUrl,
-    reporter_email: reporterEmail,
     status: "pending",
   });
 
-  if (reportError) {
-    return NextResponse.json({ error: reportError.message }, { status: 500 });
-  }
+  // count reports
+  const { count } = await supabase
+    .from("reports")
+    .select("*", { count: "exact", head: true })
+    .eq("entity_id", entityId);
+
+  const reportCount = count ?? 0;
+
+  // get existing score
+  const { data: scoreRow } = await supabase
+    .from("scores")
+    .select("*")
+    .eq("entity_id", entityId)
+    .single();
+
+  const newScore = calculateScore({
+    baseScore: scoreRow?.trust_score ?? 700,
+    reportCount,
+  });
+
+  await supabase
+    .from("scores")
+    .update({
+      trust_score: newScore.trust_score,
+      risk_level: newScore.risk_level,
+    })
+    .eq("entity_id", entityId);
 
   return NextResponse.json({ success: true });
 }
