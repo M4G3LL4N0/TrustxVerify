@@ -8,6 +8,7 @@ export type ScoreInput = {
   hasSuspiciousAddressSignal?: boolean;
   hasFreightForwardingSignal?: boolean;
   hasChargebackSignal?: boolean;
+  connectionStrength?: number;
 };
 
 export type ScoreOutput = {
@@ -25,14 +26,23 @@ function clamp(value: number, min: number, max: number) {
 export function calculateTrustScore(input: ScoreInput): ScoreOutput {
   let score = 780;
 
-  score -= input.approvedReportCount * 70;
-  score -= input.pendingReportCount * 18;
-  score += input.dismissedReportCount * 6;
-  score -= Math.max(0, input.uniqueReportTypes - 1) * 20;
+  // Weighted report impacts
+  score -= input.approvedReportCount * 100; // Approved reports have strongest negative impact
+  score -= input.pendingReportCount * 30;  // Pending reports have moderate impact
+  score += input.dismissedReportCount * 15; // Dismissed reports slightly improve score
+  
+  // Multiple report types indicate broader risk
+  score -= Math.max(0, input.uniqueReportTypes - 1) * 25;
 
-  if (input.hasSuspiciousAddressSignal) score -= 120;
-  if (input.hasFreightForwardingSignal) score -= 110;
-  if (input.hasChargebackSignal) score -= 90;
+  // Strong negative signals
+  if (input.hasSuspiciousAddressSignal) score -= 150;
+  if (input.hasFreightForwardingSignal) score -= 130;
+  if (input.hasChargebackSignal) score -= 110;
+
+  // Connection strength bonus
+  if (input.connectionStrength) {
+    score += Math.round(input.connectionStrength * 50);
+  }
 
   score = clamp(score, 0, 1000);
 
@@ -41,10 +51,11 @@ export function calculateTrustScore(input: ScoreInput): ScoreOutput {
   else if (score < 450) risk_level = "high";
   else if (score < 700) risk_level = "medium";
 
+  // Confidence score based on report volume and diversity
   const confidence_score = clamp(
-    input.approvedReportCount * 18 +
-      input.pendingReportCount * 6 +
-      input.uniqueReportTypes * 8,
+    input.approvedReportCount * 25 +
+      input.pendingReportCount * 10 +
+      input.uniqueReportTypes * 12,
     5,
     100
   );
@@ -56,6 +67,7 @@ export function calculateTrustScore(input: ScoreInput): ScoreOutput {
   if (input.hasSuspiciousAddressSignal) reasons.push("Suspicious address pattern");
   if (input.hasFreightForwardingSignal) reasons.push("Freight forwarding signal");
   if (input.hasChargebackSignal) reasons.push("Chargeback abuse signal");
+  if (input.connectionStrength) reasons.push(`Strong connections (${Math.round(input.connectionStrength * 100)}%)`);
 
   const signal_summary =
     reasons.length > 0

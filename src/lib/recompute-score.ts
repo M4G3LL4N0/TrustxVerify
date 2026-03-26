@@ -9,16 +9,22 @@ export async function recomputeEntityScore(entityId: string) {
     );
   }
 
-  const { data: reports, error: reportsError } = await supabase
-    .from("reports")
-    .select("report_type, status")
-    .eq("entity_id", entityId);
-
-  if (reportsError) {
-    throw new Error(reportsError.message);
-  }
+  const [
+    { data: reports },
+    { data: connections }
+  ] = await Promise.all([
+    supabase
+      .from("reports")
+      .select("report_type, status")
+      .eq("entity_id", entityId),
+    supabase
+      .from("connections")
+      .select("strength")
+      .or(`entity_a.eq.${entityId},entity_b.eq.${entityId}`)
+  ]);
 
   const safeReports = reports ?? [];
+  const safeConnections = connections ?? [];
 
   const approved = safeReports.filter((r) => r.status === "reviewed");
   const dismissed = safeReports.filter((r) => r.status === "dismissed");
@@ -29,6 +35,11 @@ export async function recomputeEntityScore(entityId: string) {
       .map((r) => String(r.report_type || "").toLowerCase().trim())
       .filter(Boolean)
   );
+
+  // Calculate average connection strength
+  const connectionStrength = safeConnections.length > 0
+    ? safeConnections.reduce((sum, c) => sum + (c.strength || 0), 0) / safeConnections.length
+    : 0;
 
   const joinedTypes = Array.from(reportTypes).join(" ");
   const score = calculateTrustScore({
@@ -42,6 +53,7 @@ export async function recomputeEntityScore(entityId: string) {
       joinedTypes.includes("freight") || joinedTypes.includes("forward"),
     hasChargebackSignal:
       joinedTypes.includes("chargeback") || joinedTypes.includes("payment dispute"),
+    connectionStrength
   });
 
   const { data: existingScore } = await supabase
