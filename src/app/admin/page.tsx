@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "@/lib/supabase";
+import { ReportActions } from "@/components/admin/report-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ type AdminReport = {
   report_type: string;
   status: string;
   created_at: string;
+  description: string;
 };
 
 export default async function AdminPage() {
@@ -49,9 +51,9 @@ export default async function AdminPage() {
         .limit(10),
       supabase
         .from("reports")
-        .select("id, entity_identifier, entity_type, report_type, status, created_at")
+        .select("id, entity_identifier, entity_type, report_type, status, created_at, description")
         .order("created_at", { ascending: false })
-        .limit(10),
+        .limit(20),
       supabase.from("entities").select("*", { count: "exact", head: true }),
       supabase.from("reports").select("*", { count: "exact", head: true }),
     ]);
@@ -67,8 +69,7 @@ export default async function AdminPage() {
           TrustxVerify operations dashboard
         </h1>
         <p className="mt-4 max-w-3xl text-white/70">
-          Read-only operational visibility into entities, reports, and trust data
-          flowing through the platform.
+          Review report flow, entity growth, and moderation actions that directly affect trust scores.
         </p>
       </div>
 
@@ -126,6 +127,12 @@ export default async function AdminPage() {
                   <p className="mt-1 text-sm text-white/55">
                     {report.entity_type} • {report.status}
                   </p>
+                  <p className="mt-3 text-sm leading-7 text-white/70">
+                    {report.description}
+                  </p>
+                  {report.status === "pending" ? (
+                    <ReportActions reportId={report.id} />
+                  ) : null}
                 </div>
               ))
             ) : (

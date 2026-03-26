@@ -1,8 +1,19 @@
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/badge";
+import { ConnectionList } from "@/components/entity/connection-list";
 import { getSupabaseClient } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
+
+type ConnectionItem = {
+  connection_id: string;
+  connection_type: string;
+  strength: number;
+  related_entity_id: string;
+  related_display_name: string;
+  related_identifier: string;
+  related_type: string;
+};
 
 export default async function EntityPage({
   params,
@@ -36,20 +47,57 @@ export default async function EntityPage({
 
   if (!entity) notFound();
 
-  const { data: score } = await supabase
-    .from("scores")
-    .select("*")
-    .eq("entity_id", id)
-    .order("updated_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  const [{ data: score }, { data: reports }, { data: directConnections }] = await Promise.all([
+    supabase
+      .from("scores")
+      .select("*")
+      .eq("entity_id", id)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("reports")
+      .select("*")
+      .eq("entity_identifier", entity.identifier)
+      .order("created_at", { ascending: false })
+      .limit(20),
+    supabase
+      .from("connections")
+      .select("*")
+      .or(`entity_a.eq.${id},entity_b.eq.${id}`),
+  ]);
 
-  const { data: reports } = await supabase
-    .from("reports")
-    .select("*")
-    .eq("entity_identifier", entity.identifier)
-    .order("created_at", { ascending: false })
-    .limit(20);
+  const rawConnections = directConnections ?? [];
+  const relatedIds = rawConnections.map((row) =>
+    row.entity_a === id ? row.entity_b : row.entity_a
+  );
+
+  const { data: relatedEntities } = relatedIds.length
+    ? await supabase
+        .from("entities")
+        .select("id, display_name, identifier, type")
+        .in("id", relatedIds)
+    : { data: [] };
+
+  const entityMap = new Map((relatedEntities ?? []).map((item) => [item.id, item]));
+
+  const connectionItems: ConnectionItem[] = rawConnections
+    .map((row) => {
+      const relatedId = row.entity_a === id ? row.entity_b : row.entity_a;
+      const related = entityMap.get(relatedId);
+      if (!related) return null;
+
+      return {
+        connection_id: row.id,
+        connection_type: row.connection_type,
+        strength: Number(row.strength),
+        related_entity_id: related.id,
+        related_display_name: related.display_name,
+        related_identifier: related.identifier,
+        related_type: related.type,
+      };
+    })
+    .filter(Boolean) as ConnectionItem[];
 
   return (
     <main className="pb-24 pt-8">
@@ -85,6 +133,13 @@ export default async function EntityPage({
               </ul>
             ) : null}
           </div>
+        </div>
+      </div>
+
+      <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
+        <h2 className="text-2xl font-semibold text-white">Connections</h2>
+        <div className="mt-6">
+          <ConnectionList items={connectionItems} />
         </div>
       </div>
 
