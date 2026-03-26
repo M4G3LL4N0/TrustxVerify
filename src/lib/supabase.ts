@@ -3,9 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-type AppSupabaseClient = ReturnType<typeof createConfiguredClient>;
-
-let cachedClient: AppSupabaseClient | null = null;
+let cachedClient: ReturnType<typeof createConfiguredClient> | null = null;
 
 function createConfiguredClient() {
   return createClient(supabaseUrl, supabaseAnonKey, {
