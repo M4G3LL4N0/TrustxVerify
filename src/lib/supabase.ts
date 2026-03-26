@@ -1,20 +1,26 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
-let cachedClient: SupabaseClient | null = null;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export function getSupabaseClient(): SupabaseClient | null {
-  if (cachedClient) return cachedClient;
+type AppSupabaseClient = ReturnType<typeof createConfiguredClient>;
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+let cachedClient: AppSupabaseClient | null = null;
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    return null;
-  }
-
-  cachedClient = createClient(supabaseUrl, supabaseAnonKey, {
+function createConfiguredClient() {
+  return createClient(supabaseUrl, supabaseAnonKey, {
     db: { schema: "trustxverify" },
   });
+}
+
+export function getSupabaseClient() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error("Missing Supabase environment variables");
+  }
+
+  if (!cachedClient) {
+    cachedClient = createConfiguredClient();
+  }
 
   return cachedClient;
 }
