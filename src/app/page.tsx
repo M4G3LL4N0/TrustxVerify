@@ -94,8 +94,6 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-
-      <section className="mx-auto mt-24 max-w-7xl px-6">
         {entities.length > 0 && (
           <div className="mt-8 grid gap-6 sm:grid-cols-3">
             {entities.map(entity => (
