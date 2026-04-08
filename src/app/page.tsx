@@ -98,22 +98,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto mt-16 grid max-w-7xl gap-6 px-6 sm:grid-cols-2 xl:grid-cols-4">
-        {features.map((feature) => {
-          const Icon = feature.icon;
-          return (
-            <div
-              key={feature.title}
-              className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 transition-all hover:scale-[1.02] hover:border-white/20 hover:bg-white/[0.05]"
-            >
-              <div className="inline-flex rounded-2xl bg-cyan-400/10 p-3 text-cyan-300">
-                <Icon size={22} />
+      <section className="mx-auto mt-16 max-w-7xl px-6">
+        <h2 className="text-3xl font-semibold text-white sm:text-4xl">Core Features</h2>
+        <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
+          TrustxVerify provides comprehensive tools to assess and improve transaction safety.
+        </p>
+
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={feature.title}
+                className="group relative rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 transition-all hover:scale-[1.02] hover:border-white/20 hover:bg-white/[0.05]"
+              >
+                <div className="absolute inset-0 -z-10 rounded-[1.75rem] bg-gradient-to-br from-cyan-400/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="inline-flex rounded-2xl bg-cyan-400/10 p-3 text-cyan-300">
+                  <Icon size={22} />
+                </div>
+                <h2 className="mt-5 text-xl font-semibold text-white">{feature.title}</h2>
+                <p className="mt-3 text-sm leading-7 text-white/65">{feature.body}</p>
               </div>
-              <h2 className="mt-5 text-xl font-semibold text-white">{feature.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-white/65">{feature.body}</p>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </section>
 
       <section className="mt-16 grid gap-6 lg:grid-cols-3">
@@ -186,16 +194,25 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto mt-24 max-w-7xl px-6">
-        <h2 className="text-3xl font-semibold text-white sm:text-4xl">Trust Score Insights</h2>
-        <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
-          Understand risk levels and see how TrustxVerify surfaces actionable intelligence.
-        </p>
+        <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
+          <div className="max-w-3xl">
+            <h2 className="text-3xl font-semibold text-white sm:text-4xl">Trust Score Insights</h2>
+            <p className="mt-4 text-lg leading-8 text-white/70">
+              Our scoring system analyzes multiple signals to provide comprehensive risk assessments.
+            </p>
+          </div>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
             <div className="flex items-center justify-between">
-              <div className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
-                Trust Score: 92
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-16 rounded-full bg-white/10">
+                  <div 
+                    className="h-full rounded-full bg-emerald-400" 
+                    style={{ width: '92%' }}
+                  />
+                </div>
+                <span className="text-xs font-medium text-emerald-300">92</span>
               </div>
               <div className="text-xs text-white/50">Verified Business</div>
             </div>
