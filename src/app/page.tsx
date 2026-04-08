@@ -94,7 +94,9 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
-        {entities.length > 0 && (
+
+      {entities.length > 0 && (
+        <section className="mx-auto mt-16 max-w-7xl px-6">
           <div className="mt-8 grid gap-6 sm:grid-cols-3">
             {entities.map(entity => (
               <div key={entity.id} className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
@@ -103,7 +105,8 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
-        )}
+        </section>
+      )}
         <h2 className="text-3xl font-semibold text-white sm:text-4xl">How It Works</h2>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
           TrustxVerify's three-step process makes verifying entities simple and effective.
