@@ -1,6 +1,28 @@
 import Link from "next/link";
 import { ShieldCheck, Search, Flag, Network } from "lucide-react";
+import { unstable_cache } from 'next/cache';
 import { getSupabaseClient } from "@/lib/supabase";
+import { type Entity } from "@/lib/types";
+
+const getInitialEntities = unstable_cache(
+  async () => {
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from('entities')
+        .select('*')
+        .limit(3);
+      
+      if (error) throw error;
+      return data as Entity[];
+    } catch (error) {
+      console.error('Error fetching entities:', error);
+      return [];
+    }
+  },
+  ['homepage-entities'],
+  { revalidate: 300 }
+);
 
 const features = [
   {
@@ -26,22 +48,7 @@ const features = [
 ];
 
 export default async function HomePage() {
-  let entities = [];
-  try {
-    const supabase = getSupabaseClient();
-    if (supabase) {
-      const { data, error } = await supabase
-        .from('entities')
-        .select('*')
-        .limit(3);
-      
-      if (!error) {
-        entities = data;
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching entities:', error);
-  }
+  const entities = await getInitialEntities();
   return (
     <main className="pb-32 pt-6 sm:pt-12 lg:pt-16">
       <section className="mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-white/[0.03] px-6 py-12 shadow-2xl shadow-cyan-950/30 sm:px-8 sm:py-16">
