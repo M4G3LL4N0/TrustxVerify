@@ -26,9 +26,21 @@ const features = [
 ];
 
 export default async function HomePage() {
-  const supabase = getSupabaseClient();
-  if (!supabase) {
-    throw new Error("Supabase client initialization failed");
+  let entities = [];
+  try {
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('entities')
+        .select('*')
+        .limit(3);
+      
+      if (!error) {
+        entities = data;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching entities:', error);
   }
   return (
     <main className="pb-32 pt-6 sm:pt-12 lg:pt-16">
@@ -67,29 +79,16 @@ export default async function HomePage() {
       </section>
 
       <section className="mx-auto mt-24 max-w-7xl px-6">
-        {/* Example data fetch */}
-        {async () => {
-          const { data, error } = await supabase
-            .from('entities')
-            .select('*')
-            .limit(3);
-          
-          if (error) {
-            console.error('Error fetching entities:', error);
-            return null;
-          }
-          
-          return (
-            <div className="mt-8 grid gap-6 sm:grid-cols-3">
-              {data.map(entity => (
-                <div key={entity.id} className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
-                  <h3 className="text-lg font-semibold text-white">{entity.display_name}</h3>
-                  <p className="mt-2 text-sm text-white/70">{entity.identifier}</p>
-                </div>
-              ))}
-            </div>
-          );
-        }}
+        {entities.length > 0 && (
+          <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            {entities.map(entity => (
+              <div key={entity.id} className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+                <h3 className="text-lg font-semibold text-white">{entity.display_name}</h3>
+                <p className="mt-2 text-sm text-white/70">{entity.identifier}</p>
+              </div>
+            ))}
+          </div>
+        )}
         <h2 className="text-3xl font-semibold text-white sm:text-4xl">How It Works</h2>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
           TrustxVerify's three-step process makes verifying entities simple and effective.
