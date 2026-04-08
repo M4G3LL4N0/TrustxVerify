@@ -107,6 +107,8 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      <section className="mx-auto mt-16 max-w-7xl px-6">
         <h2 className="text-3xl font-semibold text-white sm:text-4xl">How It Works</h2>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
           TrustxVerify's three-step process makes verifying entities simple and effective.
