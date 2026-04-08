@@ -80,7 +80,42 @@ export default function HomePage() {
       </section>
 
       <section className="mt-16 grid gap-6 lg:grid-cols-3">
-        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-7 lg:col-span-2">
+        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-7">
+          <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">Trust Score Explained</p>
+          <h3 className="mt-3 text-2xl font-semibold text-white">
+            How we calculate trustworthiness
+          </h3>
+          <div className="mt-6 space-y-4">
+            <div className="flex items-start gap-4">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-medium text-cyan-300">
+                1
+              </div>
+              <div>
+                <p className="font-medium text-white">Entity Verification</p>
+                <p className="mt-1 text-sm text-white/65">Cross-platform identity validation</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-medium text-cyan-300">
+                2
+              </div>
+              <div>
+                <p className="font-medium text-white">Fraud Pattern Detection</p>
+                <p className="mt-1 text-sm text-white/65">Analyzing suspicious behavior clusters</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-medium text-cyan-300">
+                3
+              </div>
+              <div>
+                <p className="font-medium text-white">Community Reports</p>
+                <p className="mt-1 text-sm text-white/65">Verified fraud reports from users</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-7">
           <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">Why now</p>
           <h3 className="mt-3 text-3xl font-semibold text-white">
             Reputation is siloed. Fraud is portable. Trust must become infrastructure.
