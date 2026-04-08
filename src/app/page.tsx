@@ -1,20 +1,30 @@
 import Link from "next/link";
 import { ShieldCheck, Search, Flag, Network } from "lucide-react";
 import { unstable_cache } from 'next/cache';
+import { type Entity } from "@/lib/types";
+import { getSupabaseClient } from "@/lib/supabase";
 import { getSupabaseClient } from "@/lib/supabase";
 import { type Entity } from "@/lib/types";
 
 const getInitialEntities = unstable_cache(
   async () => {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      console.error('Supabase client initialization failed');
+      return [];
+    }
+
     try {
-      const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from('entities')
         .select('*')
         .limit(3);
       
-      if (error) throw error;
-      return data as Entity[];
+      if (error) {
+        console.error('Supabase query error:', error);
+        return [];
+      }
+      return data ?? [];
     } catch (error) {
       console.error('Error fetching entities:', error);
       return [];
