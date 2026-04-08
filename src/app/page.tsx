@@ -61,6 +61,43 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mx-auto mt-24 max-w-7xl px-6">
+        <h2 className="text-3xl font-semibold text-white sm:text-4xl">How It Works</h2>
+        <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
+          TrustxVerify's three-step process makes verifying entities simple and effective.
+        </p>
+
+        <div className="mt-8 grid gap-8 sm:grid-cols-3">
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-300">
+              1
+            </div>
+            <h3 className="mt-4 text-xl font-semibold text-white">Search</h3>
+            <p className="mt-2 text-sm text-white/70">
+              Enter any name, email, username, phone number, or address to check trustworthiness.
+            </p>
+          </div>
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-300">
+              2
+            </div>
+            <h3 className="mt-4 text-xl font-semibold text-white">Analyze</h3>
+            <p className="mt-2 text-sm text-white/70">
+              We cross-reference signals across platforms to calculate a comprehensive trust score.
+            </p>
+          </div>
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/10 text-cyan-300">
+              3
+            </div>
+            <h3 className="mt-4 text-xl font-semibold text-white">Act</h3>
+            <p className="mt-2 text-sm text-white/70">
+              Make informed decisions with clear risk assessments and fraud pattern insights.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto mt-16 grid max-w-7xl gap-6 px-6 sm:grid-cols-2 xl:grid-cols-4">
         {features.map((feature) => {
           const Icon = feature.icon;
