@@ -24,8 +24,8 @@ export default function RootLayout({
               TRUSTXVERIFY
             </Link>
             <nav className="flex items-center gap-6 text-sm text-white/70">
-              <Link href="/search" className="hover:text-white">Search</Link>
-              <Link href="/report" className="hover:text-white">Report</Link>
+              <Link href="/search" className="hover:text-white transition-colors">Search</Link>
+              <Link href="/report" className="hover:text-white transition-colors">Report</Link>
             </nav>
           </header>
           {children}
