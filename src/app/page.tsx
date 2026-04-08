@@ -182,6 +182,67 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      <section className="mx-auto mt-24 max-w-7xl px-6">
+        <h2 className="text-3xl font-semibold text-white sm:text-4xl">Trust Score Examples</h2>
+        <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
+          See how TrustxVerify helps identify trustworthy entities and flag potential risks in real-world scenarios.
+        </p>
+
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex items-center justify-between">
+              <div className="rounded-full bg-green-400/10 px-3 py-1 text-xs font-medium text-green-300">
+                Trust Score: 92
+              </div>
+              <div className="text-xs text-white/50">Verified Seller</div>
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-white">Jane Doe</h3>
+            <p className="mt-2 text-sm text-white/70">
+              Established eBay seller with 5+ years history, 98% positive feedback across 1,200+ transactions.
+            </p>
+            <div className="mt-4 flex items-center gap-2 text-sm text-white/50">
+              <span>Platforms:</span>
+              <span className="text-white">eBay, Shopify</span>
+            </div>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex items-center justify-between">
+              <div className="rounded-full bg-yellow-400/10 px-3 py-1 text-xs font-medium text-yellow-300">
+                Trust Score: 65
+              </div>
+              <div className="text-xs text-white/50">Caution Advised</div>
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-white">John Smith</h3>
+            <p className="mt-2 text-sm text-white/70">
+              Multiple unverified accounts across platforms, recent chargeback disputes.
+            </p>
+            <div className="mt-4 flex items-center gap-2 text-sm text-white/50">
+              <span>Platforms:</span>
+              <span className="text-white">Facebook Marketplace, Craigslist</span>
+            </div>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex items-center justify-between">
+              <div className="rounded-full bg-red-400/10 px-3 py-1 text-xs font-medium text-red-300">
+                Trust Score: 28
+              </div>
+              <div className="text-xs text-white/50">High Risk</div>
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-white">XYZ Trading</h3>
+            <p className="mt-2 text-sm text-white/70">
+              Multiple fraud reports, fake reviews detected, and suspicious IP activity.
+            </p>
+            <div className="mt-4 flex items-center gap-2 text-sm text-white/50">
+              <span>Platforms:</span>
+              <span className="text-white">Amazon, Etsy</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="mx-auto mt-24 max-w-7xl rounded-[2rem] border border-white/10 bg-white/[0.03] px-6 py-12 sm:px-8 sm:py-16">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-semibold text-white sm:text-4xl">
