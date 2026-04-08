@@ -221,26 +221,54 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto mt-24 max-w-7xl px-6">
-        <h2 className="text-3xl font-semibold text-white sm:text-4xl">Trust Score Examples</h2>
+        <h2 className="text-3xl font-semibold text-white sm:text-4xl">Trust Score Insights</h2>
         <p className="mt-4 max-w-3xl text-lg leading-8 text-white/70">
-          See how TrustxVerify helps identify trustworthy entities and flag potential risks in real-world scenarios.
+          Understand risk levels and see how TrustxVerify surfaces actionable intelligence.
         </p>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
             <div className="flex items-center justify-between">
-              <div className="rounded-full bg-green-400/10 px-3 py-1 text-xs font-medium text-green-300">
+              <div className="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
                 Trust Score: 92
               </div>
-              <div className="text-xs text-white/50">Verified Seller</div>
+              <div className="text-xs text-white/50">Verified Business</div>
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-white">Jane Doe</h3>
+            <h3 className="mt-4 text-lg font-semibold text-white">Acme Inc</h3>
             <p className="mt-2 text-sm text-white/70">
-              Established eBay seller with 5+ years history, 98% positive feedback across 1,200+ transactions.
+              Established 8+ years, verified across 3 platforms, no fraud reports.
             </p>
-            <div className="mt-4 flex items-center gap-2 text-sm text-white/50">
-              <span>Platforms:</span>
-              <span className="text-white">eBay, Shopify</span>
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-white/50">Platforms:</span>
+                <span className="text-white">LinkedIn, Shopify, eBay</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-white/50">Signals:</span>
+                <span className="text-emerald-300">Domain match, consistent addresses</span>
+              </div>
+            </div>
+          </div>
+          <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+            <div className="flex items-center justify-between">
+              <div className="rounded-full bg-amber-400/10 px-3 py-1 text-xs font-medium text-amber-300">
+                Trust Score: 65
+              </div>
+              <div className="text-xs text-white/50">Caution Advised</div>
+            </div>
+            <h3 className="mt-4 text-lg font-semibold text-white">John Smith</h3>
+            <p className="mt-2 text-sm text-white/70">
+              Multiple unverified accounts, recent chargeback disputes.
+            </p>
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-white/50">Platforms:</span>
+                <span className="text-white">Facebook, Craigslist</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-white/50">Signals:</span>
+                <span className="text-amber-300">IP mismatches, freight forwarding</span>
+              </div>
             </div>
           </div>
 
@@ -270,11 +298,17 @@ export default function HomePage() {
             </div>
             <h3 className="mt-4 text-lg font-semibold text-white">XYZ Trading</h3>
             <p className="mt-2 text-sm text-white/70">
-              Multiple fraud reports, fake reviews detected, and suspicious IP activity.
+              5 fraud reports in last 90 days, fake reviews detected.
             </p>
-            <div className="mt-4 flex items-center gap-2 text-sm text-white/50">
-              <span>Platforms:</span>
-              <span className="text-white">Amazon, Etsy</span>
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-white/50">Platforms:</span>
+                <span className="text-white">Amazon, Etsy, Alibaba</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-white/50">Signals:</span>
+                <span className="text-red-300">Chargeback patterns, review manipulation</span>
+              </div>
             </div>
           </div>
         </div>
