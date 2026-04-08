@@ -67,7 +67,7 @@ export default function HomePage() {
           return (
             <div
               key={feature.title}
-              className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6"
+              className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 transition-all hover:scale-[1.02] hover:border-white/20 hover:bg-white/[0.05]"
             >
               <div className="inline-flex rounded-2xl bg-cyan-400/10 p-3 text-cyan-300">
                 <Icon size={22} />
