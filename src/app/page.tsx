@@ -83,6 +83,12 @@ export default function HomePage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
+                href="/demo"
+                className="inline-flex h-12 items-center gap-2 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-5 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-400/15"
+              >
+                Entity check demo
+              </Link>
+              <Link
                 href="/report"
                 className="inline-flex h-12 items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold text-white transition hover:border-white/30"
               >

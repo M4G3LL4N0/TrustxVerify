@@ -14,6 +14,10 @@
 - Git push status: not run this loop
 - Last updated: 2026-05-18
 
+- Overall reality label: **VERIFIED (local build) + DEMO (product flows)**
+- Launch readiness: **NOT READY**
+- Proof ladder level: **4 — Local build proof**
+
 ## 2. Portfolio Score
 - Product clarity: 7
 - MVP reality: 7
@@ -33,7 +37,19 @@
 - Saturation: recently touched
 - Recommended action: deep upgrade or proof loop
 
-## 3. Compiler Diagnosis
+
+## 3. Constraint Rank
+- Safety: no deploy; demo-labeled public copy
+- Truth: proof ladder 4; build PASS
+- Privacy: no secrets in repo commits
+- Technical: build green in matrix
+- Scope: portfolio venture (not Noaerth.com-only)
+- Deployment/Git: no vercel --prod this loop
+- Public/private boundary: CLAIM_REGISTER governs public copy
+- Approval needed: deploy, billing, auth production changes
+- Main constraint this loop: local review + claim safety
+
+## 4. Compiler Diagnosis
 - Project type: venture site + product surface
 - Strongest needed output: one believable demo interaction
 - Smallest useful improvement: run LOCAL_REVIEW.md checklist
@@ -44,12 +60,23 @@
 - Best proof step: screen recording of primary demo flow
 
 ## 4. Evidence Map
-- Proven: repo routes and build status in matrix
-- Demo: sample/local data flows
-- Planned: production auth and billing if applicable
-- Hypothesis: ICP and pricing
-- Unknown: live traffic and retention
-- Research needed: competitor wedge
+- Known: Repo routes and package.json in portfolio scan
+- Verified: Build **PASS** from portfolio matrix when PASS
+- Demo: Interactive routes use sample/local data (level 3+)
+- Planned: Production auth, billing, live integrations
+- Hypothesis: ICP, pricing, growth
+- Assumption: Subdomain may be live
+- Unknown: Revenue, retention, traffic
+- Blocked: Credentials or approval where documented
+- Failed: See FAILURE_REGISTER.md if open
+- Partial: Claim audit ongoing
+- Stale: Live URL needs re-curl
+- Risky: Compliance, security, medical, financial claims
+- Sensitive: Founder strategy, credentials — PRIVATE-ONLY
+- Public-safe: DEMO-labeled flows and honest product description
+- Private-only: Portfolio batch notes in journey
+- Do-not-claim: Traction, funding, compliance, live automation without proof
+
 
 ## 5. 10-Second Startup Explanation
 - What it is: Trustxverify product (see homepage hero)
@@ -92,3 +119,41 @@
 - Next build step: `pnpm build`
 - Biggest blocker: none if build PASS
 - Suggested next command: `cd /Users/joshuadavis/startups/trustxverify && pnpm dev`
+
+## 8. Work Completed This Loop (Hyperion v6 — 2026-05-18)
+- Mode: REALITY LABELS + portfolio memory
+- Build matrix: **PASS** (portfolio TSV)
+- Reality labels: snapshot + evidence map normalized
+- Git: see per-project safe commit
+
+## 8. Work Completed This Loop (BlackDiamond v7 — 2026-05-18)
+- Mode: CLAIM REGISTER + FAILURE REGISTER
+- Build matrix: **PASS** (portfolio TSV)
+- Claim register: created/updated
+- Failure register: created/updated
+- Launch gate: LOCAL REVIEW READY if build PASS (not PUBLIC READY)
+- Git: see per-project safe commit
+
+## 8. Work Completed This Loop (EverestKernel v8 — 2026-05-18)
+- Mode: LAUNCH READINESS + REVIEW QUEUE
+- LAUNCH_READINESS.md: installed/updated
+- Build matrix: **PASS**
+- Launch gate: **NOT READY**
+- Review queue: see NOAERTH_REVIEW_QUEUE.md if P1 demo project
+- Deployment: none
+
+## 8. Work Completed This Loop (SovereignCompiler v9 — 2026-05-18)
+- Mode: DECISION RECORD + launch governance
+- DECISION_RECORD.md: installed/updated
+- Build matrix: **PASS** (TSV; spot-build after code changes)
+- AI boundary: no deploy, no vercel --prod
+
+## 8. Work Completed This Loop (SingularityForge v11 — 2026-05-18)
+- Mode: PROOF LADDER + claim safety batch
+- Proof ladder: **4 — Local build proof**
+- Build matrix: **PASS** (TSV; spot-build after code changes)
+- No deploy
+
+## TitanAtlas v13 patch (2026-05-18)
+- Scored total: 68/100 · stage: interactive demo · priority: P2
+- Recommended action: local review + claim safety
