@@ -1,32 +1,41 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+type LooseTable = {
+  Row: Record<string, unknown>;
+  Insert: Record<string, unknown>;
+  Update: Record<string, unknown>;
+  Relationships: [];
+};
 
-export interface CrossoverOpportunity {
-  id: string
-  concept_name: string
-  source_brand: string
-  target_brand: string
-  target_category: string
-  total_score: number
-  summary: string
-  created_at: string
-  updated_at: string
-}
+type TrustxVerifyDatabase = {
+  trustxverify: {
+    Tables: Record<string, LooseTable>;
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
+  };
+};
 
-export async function getCrossoverOpportunities(): Promise<CrossoverOpportunity[]> {
-  const { data, error } = await supabaseAdmin
-    .from('brandcrossover.crossover_opportunities')
-    .select('*')
-    .order('total_score', { ascending: false })
-  
-  if (error) {
-    console.error('Error fetching crossover opportunities:', error)
-    return []
+type TrustxVerifyAdminClient = ReturnType<typeof createClient<TrustxVerifyDatabase, "trustxverify">>;
+
+let cachedAdminClient: TrustxVerifyAdminClient | null = null;
+
+export function getSupabaseAdminClient() {
+  if (cachedAdminClient) {
+    return cachedAdminClient;
   }
-  
-  return data as CrossoverOpportunity[]
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    return null;
+  }
+
+  cachedAdminClient = createClient(supabaseUrl, serviceRoleKey, {
+    db: { schema: "trustxverify" },
+  });
+
+  return cachedAdminClient;
 }

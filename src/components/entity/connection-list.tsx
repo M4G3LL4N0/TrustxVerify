@@ -18,7 +18,7 @@ export function ConnectionList({ items }: { items: ConnectionItem[] }) {
       {items.map((item) => (
         <div
           key={item.connection_id}
-          className="rounded-[1.5rem] border border-white/10 bg-slate-950/50 p-5"
+          className="border border-white/10 bg-slate-950/50 p-5"
         >
           <p className="text-xs uppercase tracking-[0.18em] text-cyan-300/80">
             {item.connection_type}
@@ -28,7 +28,7 @@ export function ConnectionList({ items }: { items: ConnectionItem[] }) {
           </h3>
           <p className="mt-1 text-sm text-white/55">{item.related_identifier}</p>
           <p className="mt-2 text-sm text-white/60">
-            {item.related_type} • strength {Number(item.strength).toFixed(2)}
+            {item.related_type} - strength {Number(item.strength).toFixed(2)}
           </p>
         </div>
       ))}

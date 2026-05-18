@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "@/lib/supabase";
+import { SubpageVisual } from "@/components/SubpageVisual";
 import { ReportActions } from "@/components/admin/report-actions";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +28,7 @@ export default async function AdminPage() {
   if (!supabase) {
     return (
       <main className="pb-24 pt-8">
+      <SubpageVisual variant="default" />
         <div className="rounded-[2rem] border border-amber-400/20 bg-amber-400/10 p-8">
           <p className="text-xs uppercase tracking-[0.24em] text-amber-300/80">Admin</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">
@@ -62,8 +64,8 @@ export default async function AdminPage() {
   const safeReports: AdminReport[] = (reports ?? []) as AdminReport[];
 
   return (
-    <main className="pb-24 pt-8">
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
+    <main className="mx-auto max-w-7xl px-6 pb-24 pt-8">
+      <div className="border border-white/10 bg-white/[0.03] p-8">
         <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">Admin</p>
         <h1 className="mt-3 text-4xl font-semibold text-white">
           TrustxVerify operations dashboard
@@ -71,28 +73,31 @@ export default async function AdminPage() {
         <p className="mt-4 max-w-3xl text-white/70">
           Review report flow, entity growth, and moderation actions that directly affect trust scores.
         </p>
+        <p className="mt-4 max-w-3xl text-sm text-amber-200/75">
+          MVP note: this dashboard must be protected with authentication and role-based authorization before production moderation use.
+        </p>
       </div>
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">
-        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+        <div className="border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-white/55">Total entities</p>
           <p className="mt-2 text-4xl font-bold text-white">{entityCount ?? 0}</p>
         </div>
-        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+        <div className="border border-white/10 bg-white/[0.03] p-6">
           <p className="text-sm text-white/55">Total reports</p>
           <p className="mt-2 text-4xl font-bold text-white">{reportCount ?? 0}</p>
         </div>
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-2">
-        <section className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+        <section className="border border-white/10 bg-white/[0.03] p-6">
           <h2 className="text-2xl font-semibold text-white">Recent entities</h2>
           <div className="mt-6 space-y-4">
             {safeEntities.length ? (
               safeEntities.map((entity) => (
                 <div
                   key={entity.id}
-                  className="rounded-[1.25rem] border border-white/10 bg-slate-950/50 p-4"
+                  className="border border-white/10 bg-slate-950/50 p-4"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-cyan-300/80">
                     {entity.type}
@@ -109,14 +114,14 @@ export default async function AdminPage() {
           </div>
         </section>
 
-        <section className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
+        <section className="border border-white/10 bg-white/[0.03] p-6">
           <h2 className="text-2xl font-semibold text-white">Recent reports</h2>
           <div className="mt-6 space-y-4">
             {safeReports.length ? (
               safeReports.map((report) => (
                 <div
                   key={report.id}
-                  className="rounded-[1.25rem] border border-white/10 bg-slate-950/50 p-4"
+                  className="border border-white/10 bg-slate-950/50 p-4"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-cyan-300/80">
                     {report.report_type}
@@ -125,7 +130,7 @@ export default async function AdminPage() {
                     {report.entity_identifier}
                   </h3>
                   <p className="mt-1 text-sm text-white/55">
-                    {report.entity_type} • {report.status}
+                    {report.entity_type} - {report.status}
                   </p>
                   <p className="mt-3 text-sm leading-7 text-white/70">
                     {report.description}

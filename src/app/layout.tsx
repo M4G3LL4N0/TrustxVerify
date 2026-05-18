@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SiteHeader } from "@/components/site-header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -8,8 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TrustxVerify",
-  description: "Trust infrastructure for people, businesses, and places.",
+  title: "TrustxVerify | The trust layer for global commerce",
+  description:
+    "Universal legitimacy scoring for people, businesses, marketplace accounts, and addresses.",
 };
 
 export default function RootLayout({
@@ -19,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.className}>
-      <body>{children}</body>
+      <body>
+        <SiteHeader />
+        {children}
+      </body>
     </html>
   );
 }

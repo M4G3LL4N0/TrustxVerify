@@ -1,7 +1,8 @@
 export type RiskLevel = "low" | "medium" | "high" | "critical";
 
 export type ScoreInput = {
-  approvedReportCount: number;
+  reviewedReportCount?: number;
+  approvedReportCount?: number;
   dismissedReportCount: number;
   pendingReportCount: number;
   uniqueReportTypes: number;
@@ -25,11 +26,11 @@ function clamp(value: number, min: number, max: number) {
 
 export function calculateTrustScore(input: ScoreInput): ScoreOutput {
   let score = 780;
+  const reviewedReportCount = input.reviewedReportCount ?? input.approvedReportCount ?? 0;
 
-  // Weighted report impacts
-  score -= input.approvedReportCount * 100; // Approved reports have strongest negative impact
-  score -= input.pendingReportCount * 30;  // Pending reports have moderate impact
-  score += input.dismissedReportCount * 15; // Dismissed reports slightly improve score
+  score -= reviewedReportCount * 115;
+  score -= input.pendingReportCount * 35;
+  score += input.dismissedReportCount * 12;
   
   // Multiple report types indicate broader risk
   score -= Math.max(0, input.uniqueReportTypes - 1) * 25;
@@ -53,7 +54,7 @@ export function calculateTrustScore(input: ScoreInput): ScoreOutput {
 
   // Confidence score based on report volume and diversity
   const confidence_score = clamp(
-    input.approvedReportCount * 25 +
+    reviewedReportCount * 25 +
       input.pendingReportCount * 10 +
       input.uniqueReportTypes * 12,
     5,
@@ -61,7 +62,7 @@ export function calculateTrustScore(input: ScoreInput): ScoreOutput {
   );
 
   const reasons: string[] = [];
-  if (input.approvedReportCount > 0) reasons.push(`${input.approvedReportCount} approved report(s)`);
+  if (reviewedReportCount > 0) reasons.push(`${reviewedReportCount} reviewed report(s)`);
   if (input.pendingReportCount > 0) reasons.push(`${input.pendingReportCount} pending report(s)`);
   if (input.uniqueReportTypes > 1) reasons.push(`${input.uniqueReportTypes} distinct risk categories`);
   if (input.hasSuspiciousAddressSignal) reasons.push("Suspicious address pattern");

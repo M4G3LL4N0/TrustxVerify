@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { ShieldCheck, AlertCircle, TrendingUp, ChevronLeft } from "lucide-react";
+import { SubpageVisual } from "@/components/SubpageVisual";
+import { ChevronLeft } from "lucide-react";
 
 export default function ReportDemoPage() {
   return (
     <main className="pb-32 pt-6 sm:pt-12 lg:pt-16">
+      <SubpageVisual variant="demo" />
       <section className="mx-auto max-w-7xl rounded-[2rem] border border-white/10 bg-white/[0.03] px-6 py-12 shadow-2xl shadow-cyan-950/30 sm:px-8 sm:py-16">
         <h1 className="text-[2rem] font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-5xl">
           Fraud Detection Demo: Brand Pairing Analysis
@@ -46,8 +48,8 @@ export default function ReportDemoPage() {
           <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 lg:col-span-2">
             <h2 className="text-xl font-semibold text-white">Opportunity Summary</h2>
             <p className="mt-4 text-sm leading-7 text-white/70">
-              Our system detected a suspicious brand pairing where 'BrandCoGlobal' was attempting
-              to impersonate the legitimate 'BrandCo' across multiple platforms. The imposter brand
+              This illustrative demo shows a suspicious account pairing where BrandCoGlobal was attempting
+              to impersonate the legitimate BrandCo across multiple platforms. The imposter brand
               showed patterns of fraudulent activity including:
             </p>
             <ul className="mt-4 list-disc space-y-2 pl-6 text-sm leading-7 text-white/70">
@@ -61,7 +63,7 @@ export default function ReportDemoPage() {
           <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6">
             <h2 className="text-xl font-semibold text-white">Why It Works</h2>
             <p className="mt-4 text-sm leading-7 text-white/70">
-              TrustxVerify's cross-platform intelligence layer connects signals across domains,
+              TrustxVerify cross-platform intelligence connects signals across domains,
               social media, payment processors, and reputation systems to detect sophisticated
               brand impersonation attempts.
             </p>

@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseClient } from "@/lib/supabase";
 
+type ConnectionRow = {
+  id: string;
+  entity_a: string;
+  entity_b: string;
+  connection_type: string;
+  strength: number;
+};
+
+type RelatedEntityRow = {
+  id: string;
+  display_name: string;
+  identifier: string;
+  type: string;
+};
+
 export async function GET(request: NextRequest) {
   const entityId = request.nextUrl.searchParams.get("entity_id")?.trim();
   const supabase = getSupabaseClient();
@@ -22,7 +37,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ items: [], error: error.message }, { status: 500 });
   }
 
-  const rows = directConnections ?? [];
+  const rows = (directConnections ?? []) as ConnectionRow[];
   if (!rows.length) {
     return NextResponse.json({ items: [] });
   }
@@ -40,7 +55,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ items: [], error: relatedError.message }, { status: 500 });
   }
 
-  const entityMap = new Map((relatedEntities ?? []).map((entity) => [entity.id, entity]));
+  const entityMap = new Map(
+    ((relatedEntities ?? []) as RelatedEntityRow[]).map((entity) => [entity.id, entity])
+  );
 
   const items = rows
     .map((row) => {

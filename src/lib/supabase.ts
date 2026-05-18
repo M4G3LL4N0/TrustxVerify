@@ -1,24 +1,41 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+type LooseTable = {
+  Row: Record<string, unknown>;
+  Insert: Record<string, unknown>;
+  Update: Record<string, unknown>;
+  Relationships: [];
+};
 
-let cachedClient: ReturnType<typeof createConfiguredClient> | null = null;
+type TrustxVerifyDatabase = {
+  trustxverify: {
+    Tables: Record<string, LooseTable>;
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
+  };
+};
 
-function createConfiguredClient() {
-  return createClient(supabaseUrl, supabaseAnonKey, {
-    db: { schema: "trustxverify" },
-  });
-}
+type TrustxVerifyClient = ReturnType<typeof createClient<TrustxVerifyDatabase, "trustxverify">>;
+
+let cachedClient: TrustxVerifyClient | null = null;
 
 export function getSupabaseClient() {
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error("Missing Supabase environment variables");
+  if (cachedClient) {
+    return cachedClient;
   }
 
-  if (!cachedClient) {
-    cachedClient = createConfiguredClient();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null;
   }
+
+  cachedClient = createClient(supabaseUrl, supabaseAnonKey, {
+    db: { schema: "trustxverify" },
+  });
 
   return cachedClient;
 }

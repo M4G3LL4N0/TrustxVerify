@@ -12,7 +12,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const body = await request.json();
+  // TODO: protect this MVP moderation route with Supabase Auth and role checks before production launch.
+  const body = await request.json().catch(() => null);
+
+  if (!body) {
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
   const reportId = String(body.reportId || "").trim();
   const action = String(body.action || "").trim();
 
@@ -26,7 +31,9 @@ export async function POST(request: NextRequest) {
     .eq("id", reportId)
     .single();
 
-  if (reportFetchError || !report?.entity_id) {
+  const entityId = typeof report?.entity_id === "string" ? report.entity_id : "";
+
+  if (reportFetchError || !entityId) {
     return NextResponse.json({ error: "Report not found." }, { status: 404 });
   }
 
@@ -41,7 +48,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: updateError.message }, { status: 500 });
   }
 
-  const score = await recomputeEntityScore(report.entity_id);
+  let score = null;
+
+  try {
+    score = await recomputeEntityScore(entityId);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "Report updated, but score recompute failed.",
+      },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({
     success: true,

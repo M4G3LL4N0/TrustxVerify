@@ -8,7 +8,7 @@ export function ScoreCard({ result }: { result: SearchResult }) {
   return (
     <Link
       href={`/entity/${result.entity.id}`}
-      className="block rounded-3xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-cyan-400/30 hover:bg-white/[0.05]"
+      className="block border border-white/10 bg-white/[0.03] p-6 transition hover:border-cyan-400/30 hover:bg-white/[0.05]"
     >
       <div className="flex items-start justify-between gap-4">
         <div>

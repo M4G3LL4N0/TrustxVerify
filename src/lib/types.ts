@@ -1,4 +1,4 @@
-export type EntityType = "person" | "business" | "address";
+export type EntityType = "person" | "business" | "marketplace_account" | "address";
 
 export interface Entity {
   id: string;

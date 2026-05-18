@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { SearchResult } from "@/lib/types";
+import type { Entity, Score, SearchResult } from "@/lib/types";
 import { getSupabaseClient } from "@/lib/supabase";
 
-type SearchApiResponse =
-  | { results: SearchResult[] }
-  | { results: SearchResult[]; error: string };
+type SearchApiResponse = { results: SearchResult[]; error?: string };
 
 export async function GET(
   request: NextRequest
@@ -28,10 +26,12 @@ export async function GET(
     );
   }
 
+  const safeQuery = q.replaceAll("%", "\\%").replaceAll("_", "\\_");
+
   const { data: entities, error } = await supabase
     .from("entities")
     .select("*")
-    .or(`display_name.ilike.%${q}%,identifier.ilike.%${q}%`)
+    .or(`display_name.ilike.%${safeQuery}%,identifier.ilike.%${safeQuery}%`)
     .limit(20);
 
   if (error) {
@@ -45,7 +45,8 @@ export async function GET(
     return NextResponse.json({ results: [] });
   }
 
-  const entityIds = entities.map((entity) => entity.id);
+  const safeEntities = entities as Entity[];
+  const entityIds = safeEntities.map((entity) => entity.id);
 
   const { data: scores, error: scoresError } = await supabase
     .from("scores")
@@ -59,9 +60,11 @@ export async function GET(
     );
   }
 
-  const results: SearchResult[] = entities.map((entity) => ({
+  const safeScores = (scores ?? []) as Score[];
+
+  const results: SearchResult[] = safeEntities.map((entity) => ({
     entity,
-    score: scores?.find((score) => score.entity_id === entity.id) ?? null,
+    score: safeScores.find((score) => score.entity_id === entity.id) ?? null,
   }));
 
   return NextResponse.json({ results });

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseClient } from "@/lib/supabase";
 import { recomputeEntityScore } from "@/lib/recompute-score";
 
+type EntityRow = {
+  id: string;
+};
+
 export async function POST(request: NextRequest) {
   const supabase = getSupabaseClient();
 
@@ -15,7 +19,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
+
+  if (!body) {
+    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
 
   const entityIdentifier = String(body.entityIdentifier || "").trim();
   const entityDisplayName = String(body.entityDisplayName || entityIdentifier).trim();
@@ -29,6 +37,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
   }
 
+  if (!["person", "business", "marketplace_account", "address"].includes(entityType)) {
+    return NextResponse.json({ error: "Invalid entity type." }, { status: 400 });
+  }
+
   const { data: existingEntity, error: existingEntityError } = await supabase
     .from("entities")
     .select("*")
@@ -39,7 +51,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: existingEntityError.message }, { status: 500 });
   }
 
-  let entityId = existingEntity?.id ?? null;
+  let entityId = ((existingEntity as EntityRow | null)?.id) ?? null;
 
   if (!existingEntity) {
     const { data: createdEntity, error: entityError } = await supabase
@@ -56,7 +68,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: entityError.message }, { status: 500 });
     }
 
-    entityId = createdEntity.id;
+    entityId = (createdEntity as EntityRow).id;
   }
 
   const { error: reportError } = await supabase.from("reports").insert({
@@ -75,7 +87,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: reportError.message }, { status: 500 });
   }
 
-  const score = await recomputeEntityScore(String(entityId));
+  let score = null;
+
+  try {
+    score = await recomputeEntityScore(String(entityId));
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : "Report saved, but score recompute failed.",
+      },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({
     success: true,

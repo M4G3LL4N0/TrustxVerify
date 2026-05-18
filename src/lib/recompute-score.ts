@@ -23,8 +23,17 @@ export async function recomputeEntityScore(entityId: string) {
       .or(`entity_a.eq.${entityId},entity_b.eq.${entityId}`)
   ]);
 
-  const safeReports = reports ?? [];
-  const safeConnections = connections ?? [];
+  type ReportSignal = {
+    report_type: string | null;
+    status: string | null;
+  };
+
+  type ConnectionSignal = {
+    strength: number | null;
+  };
+
+  const safeReports = (reports ?? []) as ReportSignal[];
+  const safeConnections = (connections ?? []) as ConnectionSignal[];
 
   const approved = safeReports.filter((r) => r.status === "reviewed");
   const dismissed = safeReports.filter((r) => r.status === "dismissed");
@@ -43,7 +52,7 @@ export async function recomputeEntityScore(entityId: string) {
 
   const joinedTypes = Array.from(reportTypes).join(" ");
   const score = calculateTrustScore({
-    approvedReportCount: approved.length,
+    reviewedReportCount: approved.length,
     dismissedReportCount: dismissed.length,
     pendingReportCount: pending.length,
     uniqueReportTypes: reportTypes.size,

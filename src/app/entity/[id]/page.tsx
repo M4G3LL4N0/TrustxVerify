@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
+import { SubpageVisual } from "@/components/SubpageVisual";
 import { Badge } from "@/components/badge";
 import { ConnectionList } from "@/components/entity/connection-list";
 import { getSupabaseClient } from "@/lib/supabase";
+import type { Entity, Report, Score } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +28,7 @@ export default async function EntityPage({
   if (!supabase) {
     return (
       <main className="pb-24 pt-8">
+      <SubpageVisual variant="default" />
         <div className="rounded-[2rem] border border-amber-400/20 bg-amber-400/10 p-8">
           <p className="text-xs uppercase tracking-[0.24em] text-amber-300/80">Entity</p>
           <h1 className="mt-3 text-4xl font-semibold text-white">
@@ -47,6 +50,8 @@ export default async function EntityPage({
 
   if (!entity) notFound();
 
+  const safeEntity = entity as Entity;
+
   const [{ data: score }, { data: reports }, { data: directConnections }] = await Promise.all([
     supabase
       .from("scores")
@@ -58,7 +63,7 @@ export default async function EntityPage({
     supabase
       .from("reports")
       .select("*")
-      .eq("entity_identifier", entity.identifier)
+      .eq("entity_identifier", safeEntity.identifier)
       .order("created_at", { ascending: false })
       .limit(20),
     supabase
@@ -67,7 +72,15 @@ export default async function EntityPage({
       .or(`entity_a.eq.${id},entity_b.eq.${id}`),
   ]);
 
-  const rawConnections = directConnections ?? [];
+  type ConnectionRow = {
+    id: string;
+    entity_a: string;
+    entity_b: string;
+    connection_type: string;
+    strength: number;
+  };
+
+  const rawConnections = (directConnections ?? []) as ConnectionRow[];
   const relatedIds = rawConnections.map((row) =>
     row.entity_a === id ? row.entity_b : row.entity_a
   );
@@ -79,7 +92,7 @@ export default async function EntityPage({
         .in("id", relatedIds)
     : { data: [] };
 
-  const entityMap = new Map((relatedEntities ?? []).map((item) => [item.id, item]));
+  const entityMap = new Map(((relatedEntities ?? []) as Entity[]).map((item) => [item.id, item]));
 
   const connectionItems: ConnectionItem[] = rawConnections
     .map((row) => {
@@ -100,35 +113,35 @@ export default async function EntityPage({
     .filter(Boolean) as ConnectionItem[];
 
   return (
-    <main className="pb-24 pt-8">
-      <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
-        <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">{entity.type}</p>
-        <h1 className="mt-3 text-4xl font-semibold text-white">{entity.display_name}</h1>
-        <p className="mt-3 text-white/55">{entity.identifier}</p>
+    <main className="mx-auto max-w-7xl px-6 pb-24 pt-8">
+      <div className="border border-white/10 bg-white/[0.03] p-8">
+        <p className="text-xs uppercase tracking-[0.24em] text-cyan-300/80">{safeEntity.type}</p>
+        <h1 className="mt-3 text-4xl font-semibold text-white">{safeEntity.display_name}</h1>
+        <p className="mt-3 text-white/55">{safeEntity.identifier}</p>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/50 p-6">
+          <div className="border border-white/10 bg-slate-950/50 p-6">
             <p className="text-sm text-white/55">Trust score</p>
             <p className="mt-2 text-5xl font-bold text-white">
-              {score?.trust_score ?? "—"}
+              {(score as Score | null)?.trust_score ?? "Unscored"}
             </p>
             <div className="mt-4">
-              <Badge variant={score?.risk_level ?? "neutral"}>
-                {score?.risk_level ?? "unscored"}
+              <Badge variant={(score as Score | null)?.risk_level ?? "neutral"}>
+                {(score as Score | null)?.risk_level ?? "unscored"}
               </Badge>
             </div>
           </div>
 
-          <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/50 p-6 lg:col-span-2">
+          <div className="border border-white/10 bg-slate-950/50 p-6 lg:col-span-2">
             <p className="text-sm text-white/55">Signal summary</p>
             <p className="mt-3 text-white/75">
-              {score?.signal_summary ?? "No signal summary yet."}
+              {(score as Score | null)?.signal_summary ?? "No signal summary yet."}
             </p>
 
-            {score?.reasons?.length ? (
+            {(score as Score | null)?.reasons?.length ? (
               <ul className="mt-4 space-y-2 text-sm text-white/65">
-                {score.reasons.map((reason: string) => (
-                  <li key={reason}>• {reason}</li>
+                {((score as Score).reasons ?? []).map((reason: string) => (
+                  <li key={reason}>- {reason}</li>
                 ))}
               </ul>
             ) : null}
@@ -136,21 +149,21 @@ export default async function EntityPage({
         </div>
       </div>
 
-      <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
+      <div className="mt-8 border border-white/10 bg-white/[0.03] p-8">
         <h2 className="text-2xl font-semibold text-white">Connections</h2>
         <div className="mt-6">
           <ConnectionList items={connectionItems} />
         </div>
       </div>
 
-      <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.03] p-8">
+      <div className="mt-8 border border-white/10 bg-white/[0.03] p-8">
         <h2 className="text-2xl font-semibold text-white">Recent reports</h2>
         <div className="mt-6 space-y-4">
           {reports?.length ? (
-            reports.map((report) => (
+            ((reports ?? []) as Report[]).map((report) => (
               <div
                 key={report.id}
-                className="rounded-[1.5rem] border border-white/10 bg-slate-950/50 p-5"
+                className="border border-white/10 bg-slate-950/50 p-5"
               >
                 <div className="flex flex-wrap items-center gap-3">
                   <Badge variant="neutral">{report.report_type}</Badge>

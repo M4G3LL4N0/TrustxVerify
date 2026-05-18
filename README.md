@@ -1,44 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TrustxVerify
 
-## Getting Started
+TrustxVerify is the trust layer for global commerce.
 
-First, run the development server:
+It scores buyers, sellers, businesses, marketplace accounts, and addresses before transactions happen. Reputation is siloed, fraud is portable, and marketplace operators need a shared legitimacy layer that can follow risk signals across eBay, Facebook Marketplace, Shopify, Craigslist, freight forwarding addresses, and private checkout flows.
+
+## Product Vision
+
+TrustxVerify is building universal legitimacy scoring for people, businesses, marketplace accounts, and addresses. The MVP proves the operating loop: search, report, moderate, score, and connect commerce risk signals.
+
+Current MVP surfaces:
+
+- Premium homepage
+- Trust search page
+- Fraud report intake page
+- Entity detail pages
+- Admin moderation dashboard
+- Weighted trust scoring engine
+- Report status flow: pending, reviewed, dismissed
+- Entity connections foundation
+- Supabase data layer scoped to schema `trustxverify`
+
+## Tech Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Supabase
+- pnpm
+- Vercel-ready build
+
+## Local Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+cd /Users/joshuadavis/startups/trustxverify
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local` from `.env.example` and fill in Supabase values:
 
-## Learn More
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_APP_URL=
+```
 
-To learn more about Next.js, take a look at the following resources:
+Do not commit real secrets. `.env.local` is intentionally ignored.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Supabase
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Run the SQL in `supabase/trustxverify_schema.sql` against your Supabase project.
 
-## Database Migrations
+Important: all app tables live in schema `trustxverify`, not `public`. The app client uses:
 
-To apply database migrations for the brandcrossover schema:
+```ts
+db: { schema: "trustxverify" }
+```
 
-1. Connect to your Supabase database
-2. Run the SQL from `supabase/brandcrossover_opportunities.sql`
-3. Verify the tables were created in the brandcrossover schema
+The current MVP RLS policies keep search, report intake, score recomputation, and moderation usable with an anon client. Before production, protect admin moderation and score writes with Supabase Auth, role checks, and service-role server routes.
 
-## Deploy on Vercel
+## Build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Optional checks if scripts exist:
+
+```bash
+pnpm lint
+pnpm typecheck
+```
+
+## Routes
+
+- `/` - product homepage
+- `/search` - trust graph search
+- `/report` - fraud signal intake
+- `/entity/[id]` - entity score and signal detail
+- `/admin` - MVP moderation dashboard
+- `/api/search` - search API
+- `/api/report` - report intake API
+- `/api/admin/reports` - MVP moderation API
+- `/api/entity-connections` - entity connection API
+
+## Manual Deploy
+
+Do not deploy automatically from recovery work. When ready:
+
+```bash
+cd /Users/joshuadavis/startups/trustxverify
+pnpm install
+pnpm build
+vercel --prod
+```
+
+## Cleanup
+
+Safe generated artifacts can be removed after a successful build:
+
+```bash
+rm -rf node_modules .next .turbo .vercel/cache dist build coverage playwright-report test-results .cache .parcel-cache
+find . -name ".DS_Store" -type f -delete
+find . -name "*.log" -type f -delete
+```
+
+Do not delete `.env.local`, `.env.example`, `pnpm-lock.yaml`, source files, Supabase SQL, docs, or used public assets.
+
+## Return Later
+
+1. Run `pnpm install`.
+2. Apply `supabase/trustxverify_schema.sql` if the database is new.
+3. Confirm `.env.local` points to the Supabase project.
+4. Run `pnpm build`.
+5. Continue with authenticated admin, Chrome extension scaffold, and richer connection ingestion.
