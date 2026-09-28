@@ -101,7 +101,7 @@ export default function HomePage() {
           <div className="border border-white/10 bg-slate-950/70 p-5 shadow-2xl shadow-cyan-950/30">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.22em] text-white/40">Entity risk brief</p>
+                <p className="text-xs uppercase tracking-[0.22em] text-white/40">Entity risk brief · sample</p>
                 <h2 className="mt-2 text-xl font-semibold">Marketplace account</h2>
               </div>
               <ShieldCheck className="h-6 w-6 text-cyan-300" />
@@ -125,6 +125,7 @@ export default function HomePage() {
               <p className="flex items-center gap-3"><Landmark className="h-4 w-4 text-cyan-300" /> Payment dispute history under review</p>
               <p className="flex items-center gap-3"><Globe2 className="h-4 w-4 text-cyan-300" /> Address connection mapped to prior report</p>
             </div>
+            <p className="mt-4 text-xs text-white/40">Sample walkthrough entity. Scores here are demo labels, not a live bureau rating.</p>
           </div>
         </div>
       </section>
