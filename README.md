@@ -1,5 +1,21 @@
 # TrustxVerify
 
+<p align="center">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="assets/hero/hero-reduced.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/hero/hero-light.svg">
+    <img src="assets/hero/hero-motion.svg" alt="TrustXVerify — animated project plate showing request &rarr; authenticate &rarr; authorise &rarr; record &rarr; reject. Motion depicts this project's real state transition." width="100%">
+  </picture>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="assets/hero/computational-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/hero/computational-light.svg">
+    <img src="assets/hero/computational-motion.svg" alt="State machine: request &rarr; authenticate &rarr; authorise &rarr; record &rarr; reject." width="100%">
+  </picture>
+</p>
+
 TrustxVerify is the trust layer for global commerce.
 
 It scores buyers, sellers, businesses, marketplace accounts, and addresses before transactions happen. Reputation is siloed, fraud is portable, and marketplace operators need a shared legitimacy layer that can follow risk signals across eBay, Facebook Marketplace, Shopify, Craigslist, freight forwarding addresses, and private checkout flows.
