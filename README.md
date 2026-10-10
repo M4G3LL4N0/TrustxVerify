@@ -1,244 +1,95 @@
-# TrustxVerify
+# trustxverify
 
-<p align="center">
-  <picture>
-    <source media="(prefers-reduced-motion: reduce)" srcset="assets/hero/hero-reduced.svg">
-    <source media="(prefers-color-scheme: light)" srcset="assets/hero/hero-light.svg">
-    <img src="assets/hero/hero-motion.svg" alt="TrustXVerify — animated project plate showing request &rarr; authenticate &rarr; authorise &rarr; record &rarr; reject. Motion depicts this project's real state transition." width="100%">
-  </picture>
-</p>
+> Verify trust before it matters. Built in Supabase. 24 routes (/about, /admin, /api/admin/reports); 1 entry point (index.html). PROTOTYPE. No test suite committed.
 
-<p align="center">
-  <picture>
-    <source media="(prefers-reduced-motion: reduce)" srcset="assets/hero/computational-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="assets/hero/computational-light.svg">
-    <img src="assets/hero/computational-motion.svg" alt="State machine: request &rarr; authenticate &rarr; authorise &rarr; record &rarr; reject." width="100%">
-  </picture>
-</p>
+The implementation summary below is intentionally conservative. Claims from NORTHSTAR are not presented as shipped functionality.
 
-TrustxVerify is the trust layer for global commerce.
+- [GitHub repository](https://github.com/M4G3LL4N0/TrustxVerify)
+- [Project site](https://trustxverify.vercel.app)
 
-It scores buyers, sellers, businesses, marketplace accounts, and addresses before transactions happen. Reputation is siloed, fraud is portable, and marketplace operators need a shared legitimacy layer that can follow risk signals across eBay, Facebook Marketplace, Shopify, Craigslist, freight forwarding addresses, and private checkout flows.
+<!-- NOAERTH_IMAGE_SLOT: TrustxVerify/hero -->
 
-## Product Vision
+## What it is
 
-TrustxVerify is building universal legitimacy scoring for people, businesses, marketplace accounts, and addresses. The MVP proves the operating loop: search, report, moderate, score, and connect commerce risk signals.
+Verify trust before it matters. Built in Supabase. 24 routes (/about, /admin, /api/admin/reports); 1 entry point (index.html). PROTOTYPE. No test suite committed.
 
-Current MVP surfaces:
+This repository is part of the NOAERTH venture ecosystem. The current public-facing evidence identifies it as a prototype / active development rather than a production-ready system.
 
-- Premium homepage
-- Trust search page
-- Fraud report intake page
-- Entity detail pages
-- Admin moderation dashboard
-- Weighted trust scoring engine
-- Report status flow: pending, reviewed, dismissed
-- Entity connections foundation
-- Supabase data layer scoped to schema `trustxverify`
+## Capabilities
 
-## Tech Stack
+### Available evidence
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- Supabase
-- pnpm
-- Vercel-ready build
+- The repository contains the implementation and documentation associated with the project description above.
+- The technology signals currently visible in the local project are listed in the technical notes below.
+- No additional capability is asserted here without a direct implementation reference.
 
-## Local Setup
+### Experimental or planned
 
-```bash
-cd /Users/joshuadavis/startups/trustxverify
+Roadmap intent is deliberately not represented as shipped functionality. Review NORTHSTAR and source implementation together before adding future-facing claims.
+
+<!-- NOAERTH_IMAGE_SLOT: TrustxVerify/workflow -->
+
+## How it works
+
+The current evidence supports a repository-level application or tool workflow, but does not provide enough verified detail in the Part 1 record to publish a component-level architecture diagram. The architecture slot is reserved for a deterministic diagram after the source flow is reviewed.
+
+<!-- NOAERTH_IMAGE_SLOT: TrustxVerify/architecture -->
+
+## Quick start
+
+### Prerequisites
+
+- A runtime suitable for `Node.js`.
+- A clean checkout of this repository.
+
+### Install
+
+```sh
 pnpm install
-pnpm dev
 ```
 
-Open `http://localhost:3000`.
+### Run locally
 
-## Environment
-
-Create `.env.local` from `.env.example` and fill in Supabase values:
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXT_PUBLIC_APP_URL=
+```sh
+pnpm run dev
 ```
 
-Do not commit real secrets. `.env.local` is intentionally ignored.
+### Build
 
-## Supabase
-
-Run the SQL in `supabase/trustxverify_schema.sql` against your Supabase project.
-
-Important: all app tables live in schema `trustxverify`, not `public`. The app client uses:
-
-```ts
-db: { schema: "trustxverify" }
+```sh
+pnpm run build
 ```
 
-The current MVP RLS policies keep search, report intake, score recomputation, and moderation usable with an anon client. Before production, protect admin moderation and score writes with Supabase Auth, role checks, and service-role server routes.
+Commands are included only when they were detected in the repository manifest; verify environment-specific requirements before deployment.
 
-## Build
+## Technical notes
 
-```bash
-pnpm build
-```
+- **Primary language:** JavaScript/TypeScript
+- **Runtime:** Node.js
+- **Package manager:** pnpm
+- **Framework and integration signals:** Go, Next.js, Playwright, Rust, Supabase, Tailwind
+- **Entry-point signals:** package.json
+- **Test evidence:** TEST_PLAN.md
+- **Repository topics:** `react`, `typescript`, `app`, `components`, `dung30n5`, `next-js`, `noaerth`, `policy`
 
-Optional checks if scripts exist:
+## Status and roadmap
 
-```bash
-pnpm lint
-pnpm typecheck
-```
+**Current status:** Prototype / active development.
 
-## Routes
+**Current:** The repository and its documented implementation are available for inspection.
 
-- `/` - product homepage
-- `/search` - trust graph search
-- `/report` - fraud signal intake
-- `/entity/[id]` - entity score and signal detail
-- `/admin` - MVP moderation dashboard
-- `/api/search` - search API
-- `/api/report` - report intake API
-- `/api/admin/reports` - MVP moderation API
-- `/api/entity-connections` - entity connection API
+**Next:** Reconcile the README, source behavior, and safe public product language before adding deeper examples or diagrams.
 
-## Manual Deploy
+**Future:** Product direction is maintained separately and must not be read as a shipped feature list.
 
-Do not deploy automatically from recovery work. When ready:
+## Contributing and license
 
-```bash
-cd /Users/joshuadavis/startups/trustxverify
-pnpm install
-pnpm build
-vercel --prod
-```
+Follow the repository's existing contribution and licensing files where present. This README does not invent an open-source license or contribution policy.
 
-## Cleanup
+## Visual documentation
 
-Safe generated artifacts can be removed after a successful build:
+Image slots are intentionally comments until authentic screenshots, deterministic diagrams, or approved conceptual visuals exist. No absent image file is referenced.
 
-```bash
-rm -rf node_modules .next .turbo .vercel/cache dist build coverage playwright-report test-results .cache .parcel-cache
-find . -name ".DS_Store" -type f -delete
-find . -name "*.log" -type f -delete
-```
+## NOAERTH
 
-Do not delete `.env.local`, `.env.example`, `pnpm-lock.yaml`, source files, Supabase SQL, docs, or used public assets.
-
-## Return Later
-
-1. Run `pnpm install`.
-2. Apply `supabase/trustxverify_schema.sql` if the database is new.
-3. Confirm `.env.local` points to the Supabase project.
-4. Run `pnpm build`.
-5. Continue with authenticated admin, Chrome extension scaffold, and richer connection ingestion.
-
-<!-- TRILLIONX:presentation:begin -->
-
-### Animated surfaces
-
-Generated from this repository's own source tree: every count, route and module below was measured, not written by hand.
-
-#### Identity
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/hero-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/hero-light.svg">
-  <img alt="Identity diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/hero-motion.svg">
-</picture>
-
-#### Entry points
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/terminal-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/terminal-light.svg">
-  <img alt="Entry points diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/terminal-motion.svg">
-</picture>
-
-#### Modules
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/architecture-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/architecture-light.svg">
-  <img alt="Modules diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/architecture-motion.svg">
-</picture>
-
-#### Routes
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/data_flow-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/data_flow-light.svg">
-  <img alt="Routes diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/data_flow-motion.svg">
-</picture>
-
-#### Primitives
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/state_machine-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/state_machine-light.svg">
-  <img alt="Primitives diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/state_machine-motion.svg">
-</picture>
-
-#### Composition
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/component_map-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/component_map-light.svg">
-  <img alt="Composition diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/component_map-motion.svg">
-</picture>
-
-#### Build and tests
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/build-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/build-light.svg">
-  <img alt="Build and tests diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/build-motion.svg">
-</picture>
-
-#### Workflow
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/workflow-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/workflow-light.svg">
-  <img alt="Workflow diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/workflow-motion.svg">
-</picture>
-
-#### Domain
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/domain-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/domain-light.svg">
-  <img alt="Domain diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/domain-motion.svg">
-</picture>
-
-#### Identity object
-
-<picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/footer-reduced.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/footer-light.svg">
-  <img alt="Identity object diagram for TrustxVerify" src="https://raw.githubusercontent.com/M4G3LL4N0/TrustxVerify/main/.github-art/surfaces/footer-motion.svg">
-</picture>
-
-<!-- TRILLIONX:presentation:end -->
-
-<!-- TRILLIONX:evidence:begin -->
-
-## What is measurable here
-
-Generated by `.github-art` from the source tree at publish time.
-
-| Signal | Value |
-| --- | --- |
-| HTTP routes | 24 |
-| Entry points | 1 |
-| Module roots | 4 |
-| Test files | 0 |
-| CI workflows | 0 |
-| Distinctive stack | Supabase |
-| Status | PROTOTYPE |
-| Evidence confidence | E3 |
-| Animated surfaces | 10 |
-
-<!-- TRILLIONX:evidence:end -->
+[NOAERTH](https://www.noaerth.com) is the venture ecosystem associated with this project.
